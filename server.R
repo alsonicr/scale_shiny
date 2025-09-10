@@ -6,7 +6,7 @@
 #
 #    https://shiny.posit.co/
 #
-
+print("############### test server.R ###############")
 library(shiny)
 library(dplyr)
 library(mongolite)
@@ -25,7 +25,7 @@ search_listOflist <- function(l,pattern){
 connection_string = 'mongodb://mongo:27017/'
 trips_collection = mongo(collection="Scales", db="IdeeScaleDb", url=connection_string)
 trips_collection$count()
-
+print("############### DB found ###############")
 
 
 
