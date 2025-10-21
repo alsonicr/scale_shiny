@@ -21,8 +21,10 @@ search_listOflist <- function(l,pattern){
   rez
 }
 
-# connection_string = 'http://localhost:27018/'
-connection_string = 'mongodb://mongo:27017/'
+# connection_string = 'http://localhost:27017/'
+# connection_string = 'mongodb://mongo:27017/'
+connection_string = 'mongodb://localhost:27017/'
+
 trips_collection = mongo(collection="Scales", db="IdeeScaleDb", url=connection_string)
 trips_collection$count()
 print("############### DB found ###############")
@@ -139,11 +141,14 @@ function(input, output, session) {
     cat(request,"\n")
     
     scale_data <- trips_collection$find(query= request)
-    print(scale_data)
+    # print(scale_data)
     scale_data
   })
   
 
+################################
+### output scale info        ###
+################################
   output$scale_tile <- renderText({
     paste0(
       "Evaluation de l'échelle : ", scale_data()$name
@@ -152,7 +157,7 @@ function(input, output, session) {
 
   output$scale_abrev <- renderText({scale_data()$`short name`})
   output$scale_publication <- renderText({scale_data()$publication})
-  output$scale_pub_url <- renderText({scale_data()$pub_url})
+  output$scale_pub_url <- renderText({paste0('<a href="',scale_data()$pub_url,'">',scale_data()$pub_url,"<a>")})
   
   output$scale_pop <- renderText({scale_data()$population})
   output$scale_pass_type <- renderText({scale_data()$`passation type`})
@@ -163,6 +168,34 @@ function(input, output, session) {
   
   # output$scale_validity <- renderPrint({str(scale_data()$validity, depth=4)})
   
-  output$scale_validity <- renderText({test_rec(scale_data()$validity,rank = 2)})
-  output$scale_fidelity <- renderText({test_rec(scale_data()$fidelity,rank = 2)})
+################################
+### output scale psychometry ###
+################################
+
+
+  
+
+  output$scale_validity <- renderText({
+
+    if("Validity" %in% names(scale_data())){
+      rez = test_rec(scale_data()$Validity,rank = 2)
+    }else{
+       rez =  "Non diponible"
+    }
+    rez
+  })
+
+
+
+  # print(scale_data()$Fidelity)
+
+  output$scale_fidelity <- renderText({
+
+    if("Fidelity" %in% names(scale_data())){
+      rez = test_rec(scale_data()$Fidelity,rank = 2)
+    }else{
+       rez =  "Non diponible"
+    }
+    rez
+  })
 }
