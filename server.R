@@ -22,8 +22,8 @@ search_listOflist <- function(l,pattern){
 }
 
 # connection_string = 'http://localhost:27017/'
-# connection_string = 'mongodb://mongo:27017/'
-connection_string = 'mongodb://localhost:27017/'
+connection_string = 'mongodb://mongo:27017/'
+# connection_string = 'mongodb://localhost:27017/'
 
 trips_collection = mongo(collection="Scales", db="IdeeScaleDb", url=connection_string)
 trips_collection$count()
